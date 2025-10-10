@@ -12,25 +12,6 @@ A Go-based API server using Fiber framework for encoding and decoding MessagePac
 
 ## API Endpoints
 
-### Health Check
-
-```
-GET /health
-```
-
-Response:
-
-```json
-{
-	"success": true,
-	"data": {
-		"status": "healthy",
-		"timestamp": "2024-01-01T00:00:00Z",
-		"service": "konverter"
-	}
-}
-```
-
 ### Encode MessagePack
 
 ```
@@ -93,8 +74,6 @@ Response:
 go run main.go
 ```
 
-The server will start on port 3000 by default, or use the `PORT` environment variable to specify a different port.
-
 ### Example requests
 
 #### Encode JSON data as MessagePack
@@ -125,12 +104,6 @@ The API has rate limiting enabled:
 
 -   100 requests per minute per IP address
 -   Returns HTTP 429 (Too Many Requests) when limit is exceeded
-
-## CORS
-
-CORS is enabled for all origins with the following methods:
-
--   GET, POST, PUT, DELETE, OPTIONS
 
 ## Dependencies
 
