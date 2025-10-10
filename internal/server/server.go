@@ -4,6 +4,7 @@ import (
 	"konverter/internal/models"
 	"konverter/internal/routes"
 	"log"
+	"os"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -55,7 +56,11 @@ func Start() *fiber.App {
 	routes.SetupHealthCheckRoute(app)
 
 	go func() {
-		if err := app.Listen(":8080"); err != nil {
+		port := os.Getenv("PORT")
+		if port == "" {
+			port = "8080"
+		}
+		if err := app.Listen(":" + port); err != nil {
 			log.Fatalf("Failed to start server: %v", err)
 		}
 	}()

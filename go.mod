@@ -4,6 +4,7 @@ go 1.25.2
 
 require (
 	github.com/gofiber/fiber/v2 v2.52.9
+	github.com/joho/godotenv v1.5.1
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 )
 
