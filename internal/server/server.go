@@ -54,6 +54,7 @@ func Start() *fiber.App {
 	// Routes
 	routes.SetupRouteV1(app)
 	routes.SetupHealthCheckRoute(app)
+	routes.SetupFaviconRoute(app)
 
 	go func() {
 		port := os.Getenv("PORT")

@@ -12,14 +12,23 @@ func SetupRouteV1(app *fiber.App) {
 	msgpackRoutes(apiV1)
 }
 
+func SetupFaviconRoute(app *fiber.App) {
+	app.Get("/favicon.ico", func(c *fiber.Ctx) error {
+		c.Set("Content-Type", "image/x-icon")
+		return c.SendFile("assets/favicon.ico", true)
+	})
+}
+
 func SetupHealthCheckRoute(app *fiber.App) {
-	app.Get("/health", func(c *fiber.Ctx) error {
+	healthCheck := func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"message":   "OK",
 			"timestamp": time.Now().UTC(),
 			"service":   "konverter",
 		})
-	})
+	}
+	app.Get("/", healthCheck)
+	app.Head("/", healthCheck)
 }
 
 func msgpackRoutes(router fiber.Router) {
