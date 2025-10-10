@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"bytes"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -21,9 +20,7 @@ func Encode(req models.EncodeRequest) (string, error) {
 
 	// Parse input data
 	var data any
-	dec := jsoniter.NewDecoder(bytes.NewReader([]byte(req.Data)))
-	dec.UseNumber()
-	err := dec.Decode(&data)
+	err := jsoniter.Unmarshal([]byte(req.Data), &data)
 	if err != nil {
 		return "", errors.New("invalid JSON data: " + err.Error())
 	}
