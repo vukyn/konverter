@@ -1,8 +1,8 @@
 package usecase
 
 import (
+	"bytes"
 	"encoding/base64"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"strconv"
@@ -10,6 +10,7 @@ import (
 
 	"konverter/internal/msgpack/models"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/vmihailenco/msgpack/v5"
 )
 
@@ -20,7 +21,9 @@ func Encode(req models.EncodeRequest) (string, error) {
 
 	// Parse input data
 	var data any
-	err := json.Unmarshal([]byte(req.Data), &data)
+	dec := jsoniter.NewDecoder(bytes.NewReader([]byte(req.Data)))
+	dec.UseNumber()
+	err := dec.Decode(&data)
 	if err != nil {
 		return "", errors.New("invalid JSON data: " + err.Error())
 	}
