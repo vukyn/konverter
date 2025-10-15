@@ -15,7 +15,6 @@ func (r *EscapeRequest) Validate() error {
 	if r.Data == "" {
 		return errors.New("data is required")
 	}
-
 	// Ensure input is valid JSON
 	var v any
 	if err := jsoniter.Unmarshal([]byte(r.Data), &v); err != nil {
@@ -30,6 +29,18 @@ type UnescapeRequest struct {
 }
 
 func (r *UnescapeRequest) Validate() error {
+	if r.Data == "" {
+		return errors.New("data is required")
+	}
+	return nil
+}
+
+type FormatRequest struct {
+	// Data is the JSON text to be formatted/pretty-printed
+	Data string `json:"data"`
+}
+
+func (r *FormatRequest) Validate() error {
 	if r.Data == "" {
 		return errors.New("data is required")
 	}

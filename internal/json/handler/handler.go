@@ -35,3 +35,17 @@ func Unescape(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(models.Response{Success: true, Data: res})
 }
+
+func Format(c *fiber.Ctx) error {
+	req := jsonmodels.FormatRequest{}
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusOK).JSON(models.Response{Success: false, Error: err.Error()})
+	}
+
+	res, err := usecase.Format(req)
+	if err != nil {
+		return c.Status(fiber.StatusOK).JSON(models.Response{Success: false, Error: err.Error()})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(models.Response{Success: true, Data: res})
+}

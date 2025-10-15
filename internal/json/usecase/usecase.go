@@ -44,3 +44,24 @@ func Unescape(req jsonmodels.UnescapeRequest) (string, error) {
 
 	return unquoted, nil
 }
+
+// Formats/pretty-prints JSON string with proper indentation
+func Format(req jsonmodels.FormatRequest) (string, error) {
+	if err := req.Validate(); err != nil {
+		return "", err
+	}
+
+	// Parse the JSON to ensure it's valid
+	var v any
+	if err := jsoniter.Unmarshal([]byte(req.Data), &v); err != nil {
+		return "", errors.New("invalid JSON data: " + err.Error())
+	}
+
+	// Marshal with indentation for pretty printing
+	formatted, err := jsoniter.MarshalIndent(v, "", "  ")
+	if err != nil {
+		return "", errors.New("failed to format JSON: " + err.Error())
+	}
+
+	return string(formatted), nil
+}

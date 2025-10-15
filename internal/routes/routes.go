@@ -43,4 +43,5 @@ func jsonRoutes(router fiber.Router) {
 	rJSON := router.Group("/json")
 	rJSON.Post("/escape", jsonHandler.Escape)
 	rJSON.Post("/unescape", jsonHandler.Unescape)
+	rJSON.Post("/format", jsonHandler.Format)
 }
