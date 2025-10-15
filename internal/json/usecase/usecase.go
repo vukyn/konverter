@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"bytes"
+	stdjson "encoding/json"
 	"errors"
 	"strconv"
 
@@ -51,17 +53,16 @@ func Format(req jsonmodels.FormatRequest) (string, error) {
 		return "", err
 	}
 
-	// Parse the JSON to ensure it's valid
-	var v any
-	if err := jsoniter.Unmarshal([]byte(req.Data), &v); err != nil {
-		return "", errors.New("invalid JSON data: " + err.Error())
+	// Validate JSON without altering key order
+	if !jsoniter.Valid([]byte(req.Data)) {
+		return "", errors.New("invalid JSON data")
 	}
 
-	// Marshal with indentation for pretty printing
-	formatted, err := jsoniter.MarshalIndent(v, "", "  ")
-	if err != nil {
+	// Pretty-print while preserving the original key order
+	var buf bytes.Buffer
+	if err := stdjson.Indent(&buf, []byte(req.Data), "", "  "); err != nil {
 		return "", errors.New("failed to format JSON: " + err.Error())
 	}
 
-	return string(formatted), nil
+	return buf.String(), nil
 }
