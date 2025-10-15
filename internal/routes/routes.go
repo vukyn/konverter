@@ -3,6 +3,7 @@ package routes
 import (
 	jsonHandler "konverter/internal/json/handler"
 	msgpackHandler "konverter/internal/msgpack/handler"
+	timestampHandler "konverter/internal/timestamp/handler"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -12,6 +13,7 @@ func SetupRouteV1(app *fiber.App) {
 	apiV1 := app.Group("/api/v1")
 	msgpackRoutes(apiV1)
 	jsonRoutes(apiV1)
+	timestampRoutes(apiV1)
 }
 
 func SetupFaviconRoute(app *fiber.App) {
@@ -45,4 +47,9 @@ func jsonRoutes(router fiber.Router) {
 	rJSON.Post("/unescape", jsonHandler.Unescape)
 	rJSON.Post("/format", jsonHandler.Format)
 	rJSON.Post("/minify", jsonHandler.Minify)
+}
+
+func timestampRoutes(router fiber.Router) {
+	rTimestamp := router.Group("/timestamp")
+	rTimestamp.Post("/convert/humanize", timestampHandler.ConvertHumanize)
 }
