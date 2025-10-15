@@ -1,6 +1,7 @@
 package routes
 
 import (
+	jsonHandler "konverter/internal/json/handler"
 	msgpackHandler "konverter/internal/msgpack/handler"
 	"time"
 
@@ -10,6 +11,7 @@ import (
 func SetupRouteV1(app *fiber.App) {
 	apiV1 := app.Group("/api/v1")
 	msgpackRoutes(apiV1)
+	jsonRoutes(apiV1)
 }
 
 func SetupFaviconRoute(app *fiber.App) {
@@ -35,4 +37,10 @@ func msgpackRoutes(router fiber.Router) {
 	rMsgPack := router.Group("/msgpack")
 	rMsgPack.Post("/encode", msgpackHandler.Encode)
 	rMsgPack.Post("/decode", msgpackHandler.Decode)
+}
+
+func jsonRoutes(router fiber.Router) {
+	rJSON := router.Group("/json")
+	rJSON.Post("/escape", jsonHandler.Escape)
+	rJSON.Post("/unescape", jsonHandler.Unescape)
 }

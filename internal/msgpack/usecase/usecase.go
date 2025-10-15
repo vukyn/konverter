@@ -13,6 +13,7 @@ import (
 	"github.com/vmihailenco/msgpack/v5"
 )
 
+// Encodes JSON data to MessagePack
 func Encode(req models.EncodeRequest) (string, error) {
 	if err := req.Validate(); err != nil {
 		return "", err
@@ -43,6 +44,7 @@ func Encode(req models.EncodeRequest) (string, error) {
 	}
 }
 
+// Decodes MessagePack data to JSON
 func Decode(req models.DecodeRequest) (any, error) {
 	if err := req.Validate(); err != nil {
 		return "", err
@@ -82,7 +84,7 @@ func Decode(req models.DecodeRequest) (any, error) {
 	return decoded, nil
 }
 
-// parses a string like "[123 111 100]" into a byte slice
+// Parses a string like "[123 111 100]" into a byte slice
 func parseByteArray(s string) ([]byte, error) {
 	// Remove brackets and trim spaces
 	s = strings.TrimSpace(s)
