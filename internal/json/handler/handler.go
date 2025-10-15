@@ -49,3 +49,17 @@ func Format(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(models.Response{Success: true, Data: res})
 }
+
+func Minify(c *fiber.Ctx) error {
+	req := jsonmodels.MinifyRequest{}
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusOK).JSON(models.Response{Success: false, Error: err.Error()})
+	}
+
+	res, err := usecase.Minify(req)
+	if err != nil {
+		return c.Status(fiber.StatusOK).JSON(models.Response{Success: false, Error: err.Error()})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(models.Response{Success: true, Data: res})
+}

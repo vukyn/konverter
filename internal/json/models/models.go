@@ -46,3 +46,20 @@ func (r *FormatRequest) Validate() error {
 	}
 	return nil
 }
+
+type MinifyRequest struct {
+	// Data is the JSON text to be minified (remove whitespace)
+	Data string `json:"data"`
+}
+
+func (r *MinifyRequest) Validate() error {
+	if r.Data == "" {
+		return errors.New("data is required")
+	}
+	// Ensure input is valid JSON
+	var v any
+	if err := jsoniter.Unmarshal([]byte(r.Data), &v); err != nil {
+		return errors.New("invalid JSON data: " + err.Error())
+	}
+	return nil
+}

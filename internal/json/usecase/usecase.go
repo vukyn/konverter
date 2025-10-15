@@ -66,3 +66,23 @@ func Format(req jsonmodels.FormatRequest) (string, error) {
 
 	return buf.String(), nil
 }
+
+// Minifies JSON string by removing unnecessary whitespace while preserving key order
+func Minify(req jsonmodels.MinifyRequest) (string, error) {
+	if err := req.Validate(); err != nil {
+		return "", err
+	}
+
+	// Validate JSON without altering key order
+	if !jsoniter.Valid([]byte(req.Data)) {
+		return "", errors.New("invalid JSON data")
+	}
+
+	// Minify by compacting the JSON (removing whitespace)
+	var buf bytes.Buffer
+	if err := stdjson.Compact(&buf, []byte(req.Data)); err != nil {
+		return "", errors.New("failed to minify JSON: " + err.Error())
+	}
+
+	return buf.String(), nil
+}
