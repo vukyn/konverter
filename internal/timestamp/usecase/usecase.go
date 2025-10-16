@@ -9,8 +9,8 @@ import (
 	humanize "github.com/dustin/go-humanize"
 )
 
-// Convert processes a timestamp conversion request and returns formatted results
-func ConvertHumanize(req timestampmodels.ConvertRequest) (timestampmodels.ConvertHumanizeResponse, error) {
+// ConvertHumanize processes a timestamp conversion request and returns formatted results
+func ConvertHumanize(req timestampmodels.ConvertHumanizeRequest) (timestampmodels.ConvertHumanizeResponse, error) {
 	if err := req.Validate(); err != nil {
 		return timestampmodels.ConvertHumanizeResponse{}, err
 	}
@@ -46,4 +46,42 @@ func ConvertHumanize(req timestampmodels.ConvertRequest) (timestampmodels.Conver
 	}
 
 	return responseHumanize, nil
+}
+
+// ConvertDateToUnix processes a date string conversion request and returns Unix timestamp results
+func ConvertDateToUnix(req timestampmodels.DateToUnixRequest) (timestampmodels.DateToUnixResponse, error) {
+	if err := req.Validate(); err != nil {
+		return timestampmodels.DateToUnixResponse{}, err
+	}
+
+	// Parse the date string using multiple format attempts
+	parsedTime, detectedFormat, err := tryParseDateFormats(req.DateString)
+	if err != nil {
+		return timestampmodels.DateToUnixResponse{}, err
+	}
+
+	// Convert to Unix timestamp in seconds
+	unixSeconds := parsedTime.Unix()
+
+	// Build response
+	response := timestampmodels.DateToUnixResponse{
+		InputDateString: req.DateString,
+		DetectedFormat:  detectedFormat,
+		Seconds:         unixSeconds,
+		Milliseconds:    unixSeconds * 1000,
+		Microseconds:    unixSeconds * 1000000,
+		Nanoseconds:     unixSeconds * 1000000000,
+		GMT:             parsedTime.UTC().Format(time.RFC3339),
+	}
+
+	// Handle timezone-specific time if provided
+	if req.Timezone != "" {
+		timezoneTime, err := formatTimezoneTime(parsedTime, req.Timezone)
+		if err != nil {
+			return timestampmodels.DateToUnixResponse{}, errors.New("invalid timezone: " + err.Error())
+		}
+		response.TimezoneTime = timezoneTime
+	}
+
+	return response, nil
 }

@@ -52,4 +52,5 @@ func jsonRoutes(router fiber.Router) {
 func timestampRoutes(router fiber.Router) {
 	rTimestamp := router.Group("/timestamp")
 	rTimestamp.Post("/convert/humanize", timestampHandler.ConvertHumanize)
+	rTimestamp.Post("/convert/date-to-unix", timestampHandler.ConvertDateToUnix)
 }
