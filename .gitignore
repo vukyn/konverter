@@ -19,3 +19,6 @@ venv/
 bin/
 main
 konverter
+
+# Certificates
+certs/
