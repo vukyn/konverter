@@ -14,3 +14,8 @@ venv/
 
 # vscode
 .vscode/
+
+# binaries
+bin/
+main
+konverter
