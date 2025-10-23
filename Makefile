@@ -10,4 +10,4 @@ docker-build:
 	docker build -t konverter .
 
 docker-run:
-	docker run -p 8080:8080 konverter
+	docker run -p 6001:8080 -d --name konverter konverter
