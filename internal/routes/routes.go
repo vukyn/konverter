@@ -1,6 +1,7 @@
 package routes
 
 import (
+	cryptoHandler "konverter/internal/crypto/handler"
 	jsonHandler "konverter/internal/json/handler"
 	msgpackHandler "konverter/internal/msgpack/handler"
 	timestampHandler "konverter/internal/timestamp/handler"
@@ -14,6 +15,7 @@ func SetupRouteV1(app *fiber.App) {
 	msgpackRoutes(apiV1)
 	jsonRoutes(apiV1)
 	timestampRoutes(apiV1)
+	cryptoRoutes(apiV1)
 }
 
 func SetupFaviconRoute(app *fiber.App) {
@@ -53,4 +55,10 @@ func timestampRoutes(router fiber.Router) {
 	rTimestamp := router.Group("/timestamp")
 	rTimestamp.Post("/convert/humanize", timestampHandler.ConvertHumanize)
 	rTimestamp.Post("/convert/date-to-unix", timestampHandler.ConvertDateToUnix)
+}
+
+func cryptoRoutes(router fiber.Router) {
+	rCrypto := router.Group("/crypto")
+	rCrypto.Post("/encrypt", cryptoHandler.Encrypt)
+	rCrypto.Post("/decrypt", cryptoHandler.Decrypt)
 }
